@@ -90,7 +90,7 @@ FINAL RANKING:
 2. Response A
 3. Response B
 
-Now provide your evaluation and ranking:"""
+Now provide your evaluation and ranking:""" # bu kısım yanıtları karşılaştırma kısmı
 
     messages = [{"role": "user", "content": ranking_prompt}]
 
@@ -154,7 +154,7 @@ Your task as Chairman is to synthesize all of this information into a single, co
 - The peer rankings and what they reveal about response quality
 - Any patterns of agreement or disagreement
 
-Provide a clear, well-reasoned final answer that represents the council's collective wisdom:"""
+Provide a clear, well-reasoned final answer that represents the council's collective wisdom:""" # orijinal sorusuna tek, kapsamlı ve doğru bir yanıt oluşturmaktır
 
     messages = [{"role": "user", "content": chairman_prompt}]
 

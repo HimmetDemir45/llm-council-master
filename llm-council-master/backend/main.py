@@ -1,5 +1,7 @@
 """FastAPI backend for LLM Council."""
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -13,6 +15,13 @@ from . import storage
 from .council import run_full_council, generate_conversation_title, stage1_collect_responses, stage2_collect_rankings, stage3_synthesize_final, calculate_aggregate_rankings
 
 app = FastAPI(title="LLM Council API")
+# React build klasörünün yolu
+frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend/dist"))
+
+# 1. Önce API endpointlerini tanımla (Mevcut kodların burada kalacak)
+# ... senin mevcut api kodların ...
+
+
 
 # Enable CORS for local development
 app.add_middleware(
@@ -50,10 +59,10 @@ class Conversation(BaseModel):
     messages: List[Dict[str, Any]]
 
 
-@app.get("/")
-async def root():
-    """Health check endpoint."""
-    return {"status": "ok", "service": "LLM Council API"}
+# @app.get("/")
+# async def root():
+#     """Health check endpoint."""
+#     return {"status": "ok", "service": "LLM Council API"}
 
 
 @app.get("/api/conversations", response_model=List[ConversationMetadata])
@@ -192,7 +201,24 @@ async def send_message_stream(conversation_id: str, request: SendMessageRequest)
             "Connection": "keep-alive",
         }
     )
+# 2. En alta (if __name__ == "__main__": den ÖNCE) şunları ekle:
 
+# Frontend statik dosyalarını bağla (JS, CSS vs için)
+if os.path.exists(frontend_path):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_path, "assets")), name="assets")
+
+    # Diğer tüm istekleri index.html'e yönlendir (React Router için gerekli)
+    @app.get("/{full_path:path}")
+    async def serve_react_app(full_path: str):
+        # Eğer istenen dosya API değilse ve dosya olarak varsa onu ver
+        file_path = os.path.join(frontend_path, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+
+        # Yoksa index.html döndür (SPA mantığı)
+        return FileResponse(os.path.join(frontend_path, "index.html"))
+else:
+    print("UYARI: Frontend build klasörü bulunamadı! Lütfen 'npm run build' çalıştırın.")
 
 if __name__ == "__main__":
     import uvicorn

@@ -20,12 +20,12 @@ COUNCIL_MODELS = [
     "ollama/deepseek-r1:8b",                   # Yerel (Çalışıyor)
     "groq/llama-3.3-70b-versatile",            # Groq (Çalışıyor)
     "groq/llama-3.1-8b-instant",
-    "openrouter/mistralai/mistral-7b-instruct:free"
+    "google/gemini-2.5-flash" #openrouter/mistralai/mistral-7b-instruct:free
     # qwen/qwen3-32b
 ]
 
 # Başkan Modeli (Hata almamak için Groq üzerinden en güçlü modeli seçelim)
-CHAIRMAN_MODEL = "groq/llama-3.3-70b-versatile"
+CHAIRMAN_MODEL = "google/gemini-2.5-flash"
 
 # OpenRouter API (Eğer OpenRouter modelleri de eklenecekse kullanılır)
 #OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"

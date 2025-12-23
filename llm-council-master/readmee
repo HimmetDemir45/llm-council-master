@@ -1,4 +1,5 @@
-cd frontend
-npm run dev
+http://localhost:8001/
 
-uv run python -m backend.main
+python -m backend.main
+
+ngrok http 8001
